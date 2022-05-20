@@ -1,7 +1,6 @@
 package controller;
 
 import model.Product;
-import service.ProductService;
 import service.ProductServiceImpl;
 
 import javax.servlet.*;
@@ -13,21 +12,47 @@ import java.util.List;
 @WebServlet(name = "ProductServlet", value = "/ProductServlet")
 public class ProductServlet extends HttpServlet {
     ProductServiceImpl productService = new ProductServiceImpl();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
         }
-        switch (action){
+        switch (action) {
             case "create":
-                showCreateForm(request,response);
+                showCreateForm(request, response);
                 break;
             case "edit":
-                showEditForm(request,response);
+                showEditForm(request, response);
+                break;
+            case "delete":
+                showDeleteForm(request, response);
+                break;
+            case "view":
+                viewProductForm(request, response);
+                break;
             default:
-                showListPage(request,response);
+                showListPage(request, response);
         }
+
+    }
+
+    private void viewProductForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("product/view.jsp");
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = productService.findById(id);
+        request.setAttribute("SanPham", product);
+        requestDispatcher.forward(request,response);
+
+     }
+
+    private void showDeleteForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("product/delete.jsp");
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = productService.findById(id);
+        request.setAttribute("sanPhamXoa",product);
+        requestDispatcher.forward(request,response);
 
     }
 
@@ -64,8 +89,16 @@ public class ProductServlet extends HttpServlet {
             case "edit":
                 editProduct(request,response);
                 break;
+            case "delete":
+                deleteProduct(request,response);
+                break;
         }
+    }
 
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        productService.delete(id);
+        response.sendRedirect("ProductServlet");
     }
 
     private void editProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {

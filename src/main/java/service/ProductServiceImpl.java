@@ -64,6 +64,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public void delete(int id) {
-
+        int indexOf = findIndexById(id);
+        productList.remove(indexOf);
     }
 }

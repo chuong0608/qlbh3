@@ -15,7 +15,9 @@
 <h1>danh sách</h1>
 <a href="/ProductServlet?action=create">Tạo mới sản phẩm</a>
 <c:forEach items="${danhSach}" var="sanPham" >
-    <h3>${sanPham.id},${sanPham.name},${sanPham.price} , <a href="/ProductServlet?action=edit&id=${sanPham.id}">Sửa</a></h3>
+    <h3>${sanPham.id},${sanPham.name},${sanPham.price} , <a href="/ProductServlet?action=edit&id=${sanPham.id}">Sửa</a>,
+        <a href="/ProductServlet?action=delete&id=${sanPham.id}">Xóa</a>,
+        <a href="/ProductServlet?action=view&id=${sanPham.id}">Xem</a></h3>
 </c:forEach>
 </body>
 </html>
